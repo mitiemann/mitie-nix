@@ -20,7 +20,6 @@
         modules = [
           ./modules/common.nix
           ./hosts/mitie-tueai/configuration.nix
-          ./hosts/mitie-tueai/hardware-configuration.nix
         ];
       };
     };
