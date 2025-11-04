@@ -37,6 +37,8 @@
       
       passwordCommand = "cat ${config.sops.secrets.email_uni_tuebingen_password.path}";
       
+      maildir.path = "mail/uni-tuebingen";
+      
       imap = {
         host = "mailserv.uni-tuebingen.de";
         port = 993;
@@ -73,6 +75,11 @@
   programs.aerc = {
     enable = true;
   };
+  
+  # Fix permissions on accounts.conf
+  home.file.".config/aerc/accounts.conf".onChange = ''
+    chmod 600 ${config.home.homeDirectory}/.config/aerc/accounts.conf
+  '';
   
   programs.gh = {
     enable = true;
