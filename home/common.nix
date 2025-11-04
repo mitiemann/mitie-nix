@@ -74,12 +74,8 @@
   
   programs.aerc = {
     enable = true;
+    extraConfig.general.unsafe-accounts-conf = true;
   };
-  
-  # Fix permissions on accounts.conf
-  home.file.".config/aerc/accounts.conf".onChange = ''
-    chmod 600 ${config.home.homeDirectory}/.config/aerc/accounts.conf
-  '';
   
   programs.gh = {
     enable = true;
