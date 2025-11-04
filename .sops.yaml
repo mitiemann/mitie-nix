@@ -1,0 +1,9 @@
+# ~/mitie-nix/.sops.yaml
+keys:
+  - &mitiemann age1p0x79y7w4tfkpdeuu4uxm7g9x773lxcdc7ckxswxe3svfw6aucxqq4njwm 
+
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+      - age:
+          - *mitiemann

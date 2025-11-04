@@ -1,23 +1,31 @@
 { config, pkgs, ... }:
 
 {
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   
-  # Let Home Manager manage itself
   programs.home-manager.enable = true;
   
   # Your username and home directory
   home.username = "mitiemann";
   home.homeDirectory = "/home/mitiemann";
-  
-  # State version (check what version you're on)
   home.stateVersion = "25.05";
   
   # Install packages
   home.packages = with pkgs; [
+    signal-desktop
     slack
   ];
+  
+  sops = {
+    defaultSopsFile = ../secrets/secrets.yaml;
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    
+    secrets = {
+      email_uni_tuebingen_password = {
+        path = "${config.home.homeDirectory}/.config/sops-secrets/email_uni_tuebingen_password";
+      };
+    };
+  };
   
   # Email configuration
   accounts.email.accounts = {
@@ -27,8 +35,7 @@
       userName = "ptioj01";
       realName = "Michael Tiemann";
       
-      # Switch to sops-nix later
-      passwordCommand = "pass show email/uni-tuebingen";
+      passwordCommand = "cat ${config.sops.secrets.email_uni_tuebingen_password.path}";
       
       imap = {
         host = "mailserv.uni-tuebingen.de";
@@ -65,9 +72,6 @@
   
   programs.aerc = {
     enable = true;
-    extraConfig.general = {
-      unsafe-accounts-conf = true;
-    };
   };
   
   programs.gh = {

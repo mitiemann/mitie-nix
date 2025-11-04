@@ -7,9 +7,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { self, nixpkgs, home-manager, sops-nix, ... }:
   let
     system = "x86_64-linux";
     lib = nixpkgs.lib;
@@ -18,8 +22,9 @@
       mitie-tueai = lib.nixosSystem {
         inherit system;
         modules = [
-          ./modules/common.nix
           ./hosts/mitie-tueai/configuration.nix
+          ./modules/common.nix
+          sops-nix.nixosModules.sops
         ];
       };
     };
@@ -29,6 +34,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
         modules = [
           ./home/common.nix
+          sops-nix.homeManagerModules.sops
         ];
       };
     };
